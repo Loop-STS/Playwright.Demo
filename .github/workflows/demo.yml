@@ -1,0 +1,301 @@
+name: Demo
+on:
+  workflow_dispatch:
+    branches: [main, master ]
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+      tags:
+        description: 'Test scenario tags'
+        required: false
+        type: boolean
+      environment:
+        description: 'Environment to run tests against'
+        type: environment
+        required: true
+  # push:
+  #   branches: [ main, master ]
+  # pull_request:
+  #   branches: [ main, master ]
+jobs:
+  install:
+    timeout-minutes: 60
+    name: 🔍 Install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: cache-node-modules
+        with:
+          path: |
+            node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Cache Playwright binaries
+        uses: actions/cache@v3
+        id: cache-playwright
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: playwright-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+
+      - name: Install Faker
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
+        run: npm install @faker-js/faker --save-dev
+
+      - name: Install dotenv
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
+        run: npm install dotenv --save 
+
+  Demo:
+    name: 🧪 Demo Example Tests (${{ matrix.shardIndex }}/${{ strategy.job-total }})
+    needs: install
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium]
+        shardIndex: [1, 2, 3, 4, 5]
+        shardTotal: [5]
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Cache Playwright
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: playwright-${{ hashFiles('package-lock.json') }}
+
+      - name: Run Playwright tests
+        run: test_env=sandbox npx playwright test tests/examples --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report-${{ matrix.shardIndex }}_${{ strategy.job-total }}
+          path: playwright-report/
+          retention-days: 3
+  
+  setStorageState:
+    name: 🧪 Set Storage State
+    needs: install
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Cache Playwright
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: playwright-${{ hashFiles('package-lock.json') }}
+
+      # Clear out the existing Authentication
+      - name: Remove File
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: ben+automation.json
+      
+      - name: Remove File
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: ben+auth2.json
+      # Installs the Faker Lib
+      - name: Install Faker
+        run: npm install @faker-js/faker --save-dev
+
+      # Runs the test  
+      - name: Run Playwright tests
+        run: tests/storageStates/setState/storageState.spec.ts --workers=1
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report-storageState
+          path: playwright-report/
+          retention-days: 3
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: storage.json
+          path: storage.json
+          retention-days: 3
+
+  useStorageState:
+    name: 🧪 useStorageState (${{ matrix.shardIndex }}/${{ strategy.job-total }})
+    needs: setStorageState
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium]
+        shardIndex: [1, 2]
+        shardTotal: [2]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Cache Playwright
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: playwright-${{ hashFiles('package-lock.json') }}
+      
+      # Clear out the existing Authentication
+      - name: Remove File
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: storage.json
+
+      # Download the Auth Tokens
+      - uses: actions/download-artifact@v3
+        with:
+          name: storage.json
+          path: ./
+
+      # Installs the Faker Lib
+      - name: Install Faker
+        run: npm install @faker-js/faker --save-dev
+
+      # Runs the test  
+      - name: Run Playwright tests
+        run: tests/storageStates/useState --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: storage-tests-report-${{ matrix.shardIndex }}_${{ strategy.job-total }}
+          path: playwright-report/
+          retention-days: 3
+
+      # - uses: actions/upload-artifact@v3
+      #   if: always()
+      #   with:
+      #     name: ben+automation.json
+      #     path: ben+automation.json
+      #     retention-days: 3
+
+      # - uses: actions/upload-artifact@v3
+      #   if: always()
+      #   with:
+      #     name: ben+auth2.json
+      #     path: ben+auth2.json
+      #     retention-days: 3        
+
+  merge:
+    name: Merge Reports
+    if: ${{ always() }}
+    needs: [Demo, setStorageState, useStorageState ]
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: "pages"
+      cancel-in-progress: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Cache Playwright
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: playwright-${{ hashFiles('package-lock.json') }}
+
+      - uses: actions/checkout@v2
+      
+      # Clear out the existing Authentication
+ 
+      - uses: actions/download-artifact@v3
+
+      - name: Display structure of downloaded files
+        run: ls -R
+
+      - name: Download Merge HTML
+        run: npm install playwright-merge-html-reports --dev
+
+      - name: Run Report Merge
+        run: npx playwright test tests/merge-reports
+
+      - name: Display structure of Merged
+        run: ls -R
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: demoMerged
+          path: test-merge-report-demo/
+          retention-days: 3
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload entire repository
+          path: test-merge-report-demo/
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1

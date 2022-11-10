@@ -1,0 +1,45 @@
+{
+  "cookies": [
+    {
+      "name": "_ga",
+      "value": "GA1.2.1608048537.1668099963",
+      "domain": ".automationintesting.online",
+      "path": "/",
+      "expires": 1702659963.225232,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_gid",
+      "value": "GA1.2.1215942056.1668099963",
+      "domain": ".automationintesting.online",
+      "path": "/",
+      "expires": 1668186363,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_gat",
+      "value": "1",
+      "domain": ".automationintesting.online",
+      "path": "/",
+      "expires": 1668100023,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "banner",
+      "value": "true",
+      "domain": "automationintesting.online",
+      "path": "/",
+      "expires": 1668186363,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Strict"
+    }
+  ],
+  "origins": []
+}
