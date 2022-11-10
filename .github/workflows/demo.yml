@@ -126,7 +126,7 @@ jobs:
 
       # Runs the test  
       - name: Run Playwright tests
-        run: tests/storageStates/setState/storageState.spec.ts --workers=1
+        run: test_env=sandbox npx playwright test tests/storageStates/setState/storageState.spec.ts --workers=1
 
       - uses: actions/upload-artifact@v3
         if: always()
