@@ -110,16 +110,6 @@ jobs:
             ~/.cache/ms-playwright
           key: playwright-${{ hashFiles('package-lock.json') }}
 
-      # Clear out the existing Authentication
-      - name: Remove File
-        uses: JesseTG/rm@v1.0.3
-        with:
-          path: ben+automation.json
-      
-      - name: Remove File
-        uses: JesseTG/rm@v1.0.3
-        with:
-          path: ben+auth2.json
       # Installs the Faker Lib
       - name: Install Faker
         run: npm install @faker-js/faker --save-dev
@@ -248,7 +238,11 @@ jobs:
 
       - uses: actions/checkout@v2
       
-      # Clear out the existing Authentication
+        # Clear out the existing Authentication
+      - name: Remove File
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: storage.json
  
       - uses: actions/download-artifact@v3
 
