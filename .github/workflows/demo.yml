@@ -1,7 +1,17 @@
-name: Demo
+name: Demo - ${{ github.event.inputs.message }}
 on:
   workflow_dispatch:
     branches: [main, master ]
+    inputs:
+      Enviroment:
+        type: choice
+        description: Which run-time enviroment?
+        options: 
+        - staging
+        - sandbox
+      Description:
+        required: true
+
   # push:
   #   branches: [ main, master ]
   # pull_request:
