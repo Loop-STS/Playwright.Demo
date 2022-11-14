@@ -1,4 +1,4 @@
-name: Demo - ${{ github.event.inputs.Description }}
+name: Demo
 on:
   workflow_dispatch:
     branches: [main, master ]
@@ -11,6 +11,8 @@ on:
         - sandbox
       Description:
         required: true
+    run-name: ${{ inputs.Description }} by @${{ github.actor }}
+
 
   # push:
   #   branches: [ main, master ]
