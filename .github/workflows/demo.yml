@@ -1,4 +1,4 @@
-name: Demo - ${{ github.event.inputs.message }}
+name: Demo - ${{ github.event.inputs.Description }}
 on:
   workflow_dispatch:
     branches: [main, master ]
