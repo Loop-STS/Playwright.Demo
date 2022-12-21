@@ -48,7 +48,7 @@ test.describe('API', () => {
     
       const examplePost2 = {
         "name": ENV.Name,
-        "email": "ben123@email.com",
+        "email": "ben456@gmail.com",
         "phone": "111-111-1111",
         "subject": "I would like to book a room",
         "description": "This is a great message"

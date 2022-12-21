@@ -12,6 +12,8 @@ test('test', async ({ page }) => {
     
     await page.locator('div[class *= "rbc-date-cell"]', { has: page.locator('text=10')}).click()
 
+    
+    
     // Below are two more example:
 
     // page.locator('div[class="ant-row"]', { has: page.locator('text=Contact Information')}).locator('div[class="ant-row"]', { has: page.locator('text=name')}).locator('span[aria-label="edit"]').click()
