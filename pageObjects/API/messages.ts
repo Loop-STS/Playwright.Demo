@@ -1,4 +1,4 @@
-import { test, expect, request, APIRequestContext } from '@playwright/test';
+import { test, expect, APIRequestContext } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import ENV from '../../env'
 

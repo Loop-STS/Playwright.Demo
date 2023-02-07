@@ -23,8 +23,10 @@ export class POM {
         await this.page.waitForSelector('text=Choose a custom mix of investments for your plan.')
     }
 
-    async goToHome(): Promise<void> {
+    async goToHome(){
+        await test.step(`I can go to the home page`, async () => {
         await this.page.goto('https://bookcart.azurewebsites.net/');
+        })
     }
 
     async exampleEnabled(): Promise<boolean> {
@@ -40,5 +42,11 @@ export class POM {
     async exampleNumber(): Promise<number> {
         return await this.page.locator('div[class="col-md-3 col-sm-12"]').count()
     }
+
+    async clickBookName(name: string){
+        await test.step(`I can click the book using the name: ${name}`, async () => {
+        await expect(this.page.locator(`text=${name} >> nth=0`),`Can not find the Book Name ${name}- did the locator change?`).toBeVisible()
+        await this.page.locator(`text=${name} >> nth=0`).click();
+    })} 
 
 }

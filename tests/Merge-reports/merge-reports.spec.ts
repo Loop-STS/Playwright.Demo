@@ -25,10 +25,8 @@
    path.resolve(process.cwd(), "./playwright-report-3_5"),
    path.resolve(process.cwd(), "./playwright-report-4_5"),
    path.resolve(process.cwd(), "./playwright-report-5_5"),
-
    path.resolve(process.cwd(), "./storage-tests-report-1_2"),
    path.resolve(process.cwd(), "./storage-tests-report-2_2"),
-
    path.resolve(process.cwd(), "./playwright-report-storageState"),
 
  ], { outputFolderName: './test-merge-report-demo' });

@@ -12,11 +12,7 @@ on:
         - sandbox
       description:
         required: true
-    
-  # push:
-  #   branches: [ main, master ]
-  # pull_request:
-  #   branches: [ main, master ]
+        
 jobs:
   install:
     timeout-minutes: 60
@@ -197,21 +193,7 @@ jobs:
         with:
           name: storage-tests-report-${{ matrix.shardIndex }}_${{ strategy.job-total }}
           path: playwright-report/
-          retention-days: 3
-
-      # - uses: actions/upload-artifact@v3
-      #   if: always()
-      #   with:
-      #     name: ben+automation.json
-      #     path: ben+automation.json
-      #     retention-days: 3
-
-      # - uses: actions/upload-artifact@v3
-      #   if: always()
-      #   with:
-      #     name: ben+auth2.json
-      #     path: ben+auth2.json
-      #     retention-days: 3        
+          retention-days: 3  
 
   merge:
     name: Merge Reports
