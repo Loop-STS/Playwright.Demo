@@ -1,6 +1,6 @@
-import { test, expect } from '@playwright/test';
+import test from '../../middlewear';
 
-test('Generic Passing', async ({ page }) => {
+test('Generic Passing Test', async ({ page }) => {
 
   await page.goto('https://automationintesting.online/');
 
@@ -30,7 +30,7 @@ test('Generic Passing', async ({ page }) => {
 
 });
 
-test('Generic Negative Test', async ({ page }) => {
+test('Generic Failing Test', async ({ page }) => {
 
   await page.goto('https://automationintesting.online/');
 
@@ -54,7 +54,7 @@ test('Generic Negative Test', async ({ page }) => {
 
   await page.getByTestId('ContactDescription').click();
 
-  await page.getByTestId('ContactDescription').fill('This is a great message');
+  await page.getByTestId('Contact').fill('This is a great message');
 
   await page.getByRole('button', { name: 'Submit' }).click();
 

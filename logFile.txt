@@ -1,0 +1,13 @@
+await page.waitForResponse(resp => resp.url().includes('Wishlist/82274'));
+await page.waitForResponse(resp => resp.url().includes('book/'));
+await page.waitForResponse(resp => resp.url().includes('book/GetCategoriesList'));
+await page.waitForResponse(resp => resp.url().includes('user/82274'));
+await goto("https://bookcart.azurewebsites.net/");
+await _mainFrame.click("text=Fiction", {"strict":true});
+await page.waitForResponse(resp => resp.url().includes('shoppingcart/82274'));
+await _mainFrame.click("internal:role=button >> internal:has-text=\"shopping_cart0\"i", {"strict":true});
+await page.waitForResponse(resp => resp.url().includes('Wishlist/82274'));
+await page.waitForResponse(resp => resp.url().includes('book/GetCategoriesList'));
+await page.waitForResponse(resp => resp.url().includes('user/82274'));
+await page.waitForResponse(resp => resp.url().includes('book/'));
+await goto("https://bookcart.azurewebsites.net/");

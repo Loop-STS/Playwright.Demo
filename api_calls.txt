@@ -1,0 +1,6 @@
+----- Marker: page.goto("https://bookcart.azurewebsites.net/") -----
+Incoming Response: 200 https://bookcart.azurewebsites.net/api/book/
+Incoming Response: 200 https://bookcart.azurewebsites.net/api/book/GetCategoriesList
+Incoming Response: 200 https://bookcart.azurewebsites.net/api/user/82839
+Incoming Response: 200 https://bookcart.azurewebsites.net/api/Wishlist/82839
+----- Marker: page.goto("https://bookcart.azurewebsites.net/") -----

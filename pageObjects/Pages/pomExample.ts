@@ -6,21 +6,19 @@ export class POM {
 
     // readonly Locators stating the items are locators (or parameters)
     readonly page: Page
-    readonly pageLocator: Locator
-
-
+    readonly menu: (text: string) => Locator;
+    
 
     // These are the SmartPlan App Object Definitions : Contributions
     constructor(page: Page) {
         // Landing Page
         this.page = page    
-        this.pageLocator = page.locator('text=Contributions');
-;
+        this.menu = (text: string) => page.locator(`text=${text}`);
+        ;
     }
 
-    async verifyContributionsPage()  : Promise<void>  {
-        await expect(this.pageLocator).toBeVisible();
-        await this.page.waitForSelector('text=Choose a custom mix of investments for your plan.')
+    menu2(text: string): Locator {
+        return this.page.locator(`text=${text}`);
     }
 
     async goToHome(){

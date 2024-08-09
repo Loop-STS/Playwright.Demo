@@ -32,7 +32,7 @@ test('Book the Nearest Monday', async ({ page }) => {
     
     await page.getByRole('button', { name: 'Book this room' }).click();
     
-    await page.locator('div[class *= "rbc-date-cell"]', { has: page.locator(`text=${startFormatted}`)}).click()
+    await page.locator('call-log-call-header', { has: page.locator(`text=${startFormatted}`)}).click()
 
 });
 

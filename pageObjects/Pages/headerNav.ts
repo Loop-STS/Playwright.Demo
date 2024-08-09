@@ -11,7 +11,7 @@ export class HeaderMenu {
 
     async clickHomeLink() {
         await test.step(`I can click the 'Home' link`, async () => {
-            await expect(page.getByRole('link', { name: 'home' })).toBeVisible();
+            await expect(this.page.getByRole('link', { name: 'home' })).toBeVisible();
             await page.getByRole('link', { name: 'home' }).click();
             await expect(page).toHaveURL('https://www.workwithloop.com/');
         });
