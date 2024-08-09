@@ -22,7 +22,7 @@ export class POM {
     }
 
     async goToHome(){
-        await test.step(`I can go to the home page`, async () => {
+        await test.step(`I can to the home page`, async () => {
         await this.page.goto('https://bookcart.azurewebsites.net/');
         })
     }
